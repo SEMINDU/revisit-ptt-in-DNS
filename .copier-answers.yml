@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v0.0.3
+_src_path: https://github.com/delapazruiz/fairRcode.git
+authors: Iowner Erick Semindu
+citation: true
+code_of_conduct: true
+community: true
+contact_email: e.l.semindu@utwente.nl
+copyright_holder: Iowner utwente
+copyright_year: 2026
+owner: Iowner E.L.Semindu
+software_license: MIT License
+software_name: revisiting-ppt-in-DNS
+software_purpose: The purpose of revisiting-ppt-in-DNS is ...analysis of DNS dependency
+    using iyp

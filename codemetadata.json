@@ -1,0 +1,23 @@
+{
+  "@context": "https://doi.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Project Name",
+  "description": "A brief description of the research software and analysis.",
+  "codeRepository": "https://github.com",
+  "license": "https://spdx.org",
+  "version": "1.0.0",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Jane",
+      "familyName": "Doe",
+      "email": "j.doe@university.nl",
+      "affiliation": "Dutch Research University",
+      "identifier": "https://orcid.org"
+    }
+  ],
+  "softwareRequirements": [
+    "R (>= 4.1.0)",
+    "tidyverse"
+  ]
+}
