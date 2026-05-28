@@ -1,76 +1,166 @@
-# Research Software & Analysis Code
+# Tranco DNS Dependency Analysis Code
 
-## Software Architecture
-This repository contains the code used to reconstruct and analyse DNS dependency chains for domains in the Cisco Umbrella Top 1 Million dataset.
+This folder contains the notebooks used to model and analyse DNS dependency for the Tranco domain list. The workflow reconstructs nameserver dependency paths from the IYP/Neo4j graph, summarizes the transitive closure base (TCB) for each domain, identifies dominant nameserver infrastructure, maps nameserver dependencies to IP prefixes and autonomous systems, and then runs the final analysis.
 
-The current implementation is notebook-based and split into two main stages:
+Run the notebooks in the order documented below. Later notebooks depend on parquet outputs created by earlier notebooks.
 
-- `ppt-iyp-cisco-top1m-fetch.ipynb`: data acquisition, dependency reconstruction, and summary-file generation.
-- `ppt-iyp-cisco-top1m-analy.ipynb`: loading processed outputs, statistical summarisation, and figure generation.
+## Reproducibility Requirements
 
-The workflow relies on intermediate CSV files stored under `data/`, which are then reused for downstream analysis and visualisation.
+Before running the notebooks, make sure the Python environment and Neo4j database are ready.
 
-## Directory Map
-Suggested repository structure:
+Required Python libraries include:
 
-- `code/` or `notebooks/`: source notebooks and, later, extracted reusable functions/scripts.
-- `data/names/`: domain and TLD classification files such as `categorized_names.csv`.
-- `data/result/tmp/`: temporary chunked outputs generated during large-scale dependency fetching.
-- `data/result/without_allias/`: processed summary tables used for analysis.
-- `data/result/without_allias/figures/`: generated plots and figures.
-- `outputs/`: optional directory for manuscript-ready tables and figures.
-- `docs/`: project documentation and repository metadata.
+- `pandas`
+- `numpy`
+- `matplotlib`
+- `IPython`
+- `requests`
+- `beautifulsoup4`
+- `neo4j`
+- `pyarrow` or another parquet engine supported by pandas
 
-## Execution Workflow
-To reproduce the analysis from scratch, run the workflow in the following order and do not proceed to the next step until the expected outputs from the current step have been fully generated.
+The notebooks assume a local Neo4j database is running at:
 
-1. `ppt-iyp-cisco-top1m-fetch.ipynb`  
-   This notebook performs data acquisition and DNS dependency reconstruction for the Cisco Umbrella Top 1 Million dataset. Because this stage can generate a large volume of intermediate results, partial outputs are written to `data/result/tmp/` during execution. These temporary files are not included in the repository and must be produced locally before any downstream analysis can be run.
+```text
+neo4j://localhost:7687
+```
 
-   Expected outputs from this step include:
-   - chunked intermediate files in `data/result/tmp/`
-   - processed summary tables in `data/result/`
-   - unresolved or exception files, where applicable
+with credentials:
 
-   This step must complete successfully before continuing.
+```text
+username: neo4j
+password: password
+```
 
-2. `ppt-iyp-cisco-top1m-analy.ipynb`  
-   This notebook reads the processed outputs created by the fetch stage. It assumes that all required intermediate and final files from Step 1 already exist. It then performs statistical summarisation, comparative analysis, and figure generation.
+For reproducibility, use the same IYP/Neo4j instance dump used for the experiment: February 15, 2026. The dependency queries rely on labels and relationships from that graph, including OpenINTEL, IYP, and BGPKIT-derived relationships. The Neo4j APOC procedures must also be available because the notebooks use `apoc.path.expandConfig`.
 
-   Expected outputs from this step include:
-   - analytical summary tables
-   - plots and figures saved under `data/result/without_allias/figures/`
+## Expected Directory Structure
 
-## Reproducibility Note
-The repository does not store large intermediate files generated during the fetch stage. Users must run the full data-construction workflow locally to create these files before executing the analysis notebook. The analysis step is therefore not standalone and depends on the successful completion of the preceding data-generation step.
+The notebooks read and write files relative to the repository root:
 
-- run the notebooks in the documented order,
-- preserve the expected `data/` directory structure,
-- ensure the Neo4j database is available before starting the fetch notebook,
-- record the Python version and package versions in an environment file such as `requirements.txt` or `environment.yml`.
+```text
+code/
+data/
+  names/
+  result/
+    dns_dependency/
+    NS_infrastructure/
+    IP_Prefix_AS_dependency/
+outputs/
+  figures/
+    tranco_list/
+```
 
-## Coding and Open Science Practices
-This repository is being developed with reusability and transparency in mind.
+Most generated data is stored as parquet files. Large intermediate result files are not expected to be committed to the repository and should be regenerated locally.
 
-Planned or recommended improvements include:
+The notebooks use `Path.cwd().parent` to locate `data/` and `outputs/`. For the paths to resolve correctly, start the notebooks with `code/` as the working directory, or update the path cells before running them.
 
-- refactoring notebook functions into standalone Python modules,
-- separating pure functions from execution code,
-- adding docstrings to reusable functions,
-- including automated tests for critical processing steps,
-- documenting all input datasets, intermediate files, and outputs.
+## Execution Order
 
-## Metadata and Citation
-Repository-level metadata should be provided through files such as:
+### 1. `ptt-iyp-modeling_dependency_tranco_list.ipynb`
 
-- `CITATION.cff`
-- `codemeta.json`
-- `LICENSE`
-- `README.md`
+Run this notebook first.
 
-If archived on Zenodo or a similar service, the repository DOI should be added to `CITATION.cff`.
+This notebook builds the core dependency dataset for the Tranco domains. It connects to Neo4j, checks the Tranco domain nodes, classifies domains by TLD type, identifies parent-domain status, and creates the domain groups used by the rest of the workflow.
 
-## Maintainer
-Maintained by: [Your Name / ORCID]
+The notebook fetches TLD metadata from IANA and the public suffix list, categorizes domains, and saves the categorized domain table. It then runs Cypher dependency queries over the Neo4j graph to find authoritative nameserver dependency paths for each domain group.
 
-This repository is being prepared in line with FAIR and research software good-practice principles.
+Main outputs:
+
+- `data/names/tranco_categorized_names.parquet`
+- `data/result/tranco_list/ccTLD_domains_dependency_no_parent.parquet`
+- `data/result/tranco_list/gTLD_domains_dependency_no_parent.parquet`
+- `data/result/tranco_list/gen_resTLD_domains_dependency_no_parent.parquet`
+- `data/result/tranco_list/sponTLD_domains_dependency_no_parent.parquet`
+- `data/result/tranco_list/infrTLD_domains_dependency_no_parent.parquet`
+- `data/result/tranco_list/special_use_domains_dependency_no_parent.parquet`
+- `data/result/tranco_list/domain_with_parent_rel.parquet`
+
+This step can take a long time because it queries the graph for many domains. Do not run the infrastructure or analysis notebooks until these outputs exist.
+
+### 2. `ppt-iyp-analysis (tranco)_infrastructure_NS_service_provider.ipynb`
+
+Run this notebook after the modeling dependency notebook has completed.
+
+This notebook studies nameserver service-provider infrastructure in the resolved dependency data. It loads the dependency parquet files created in Step 1, combines the domain groups, counts nameserver frequency, groups nameservers into provider-style labels, normalizes AWS DNS infrastructure naming, and identifies the most common nameserver infrastructure providers.
+
+The result from this notebook is later used by the final analysis notebook to measure how much domains depend on the top 5 and top 10 nameserver infrastructure providers.
+
+Main output:
+
+- `data/result/tranco_list/tranco_NS_Infrastructure.parquet`
+
+Note: the final analysis notebook reads the nameserver infrastructure file from `data/result/NS_infrastructure/tranco_NS_infrastructure.parquet`, while this notebook writes `tranco_NS_Infrastructure.parquet`. Before running the final analysis, make sure the generated file is available at the path and filename used by the analysis notebook.
+
+### 3. `ptt-iyp-analysis_(tranco)_infrastructure_ip_prefix_AS.ipynb`
+
+Run this notebook after the modeling dependency notebook has completed.
+
+This notebook maps nameserver dependencies to lower-level infrastructure: IP addresses, BGP prefixes, and autonomous systems. It loads the domain-to-nameserver dependency outputs from Step 1, connects to Neo4j, and runs a Cypher query that expands from authoritative nameservers through IP, prefix, and AS relationships.
+
+This code is expensive to run. The full run can take more than 1200 minutes, so it writes chunked parquet outputs to make the result easier to store and resume.
+
+Main outputs:
+
+- `data/result/tranco_list/IP_Prefix_AS_dependency_sample.parquet`
+- `data/result/tranco_list/IP_Prefix_AS_dependency/chunk_*.parquet`
+
+The sample output is useful for checking that the query behaves correctly before running the full dataset.
+
+### 4. `ppt-iyp-analysis_(tranco).ipynb`
+
+Run this notebook at the end.
+
+This is the main analysis notebook. It loads the dependency results from Step 1, the nameserver infrastructure results from Step 2, and supporting TLD metadata. It combines the resolved domain dependency data, checks missing and unresolved domains, saves a reusable resolved summary table, and produces the statistical and visual analysis.
+
+The analysis includes:
+
+- TCB distribution for resolved Tranco domains
+- TCB comparison between ccTLD and gTLD-style groups
+- old-TLD analysis based on TLDs available around the original 2004 study period
+- average TCB by TLD group
+- group-size effects on average TCB
+- shrinkage-adjusted average TCB for small TLD groups
+- relationship between Tranco rank and TCB
+- top-ranked versus least-ranked domain comparisons
+- dependency on top 5 and top 10 nameserver infrastructure providers
+- examples of domains with and without parent-domain dependency effects
+
+Main outputs:
+
+- `data/result/tranco_list/unresolved_domains_by_type.parquet`
+- `data/names/ccTLD_registration_date_may_10_2026.parquet`
+- figures under `outputs/figures/tranco_list/`
+
+For more detailed information about generated outputs and reports, refer to `outputs/reports/README.md`.
+
+## Notebook Summary
+
+| Notebook | Purpose | Run order |
+| --- | --- | --- |
+| `ptt-iyp-modeling_dependency_tranco_list.ipynb` | Builds categorized Tranco domain lists and queries Neo4j for domain-to-nameserver dependency paths. | 1 |
+| `ppt-iyp-analysis (tranco)_infrastructure_NS_service_provider.ipynb` | Counts and groups nameserver infrastructure providers from resolved dependency data. | 2 |
+| `ptt-iyp-analysis_(tranco)_infrastructure_ip_prefix_AS.ipynb` | Maps nameserver dependencies to IP addresses, BGP prefixes, and ASNs. | 3 |
+| `ppt-iyp-analysis (tranco).ipynb` | Runs the final statistical analysis and generates figures. | 4 |
+
+## Re-running the Workflow
+
+To reproduce the results from scratch:
+
+1. Install the required Python libraries.
+2. Install Neo4j and APOC.
+3. Load the IYP/Neo4j dump from February 15, 2026.
+4. Start Neo4j and confirm the notebook credentials match the local database.
+5. Run `ptt-iyp-modeling_dependency_tranco_list.ipynb` completely.
+6. Run `ppt-iyp-analysis (tranco)_infrastructure_NS_service_provider.ipynb`.
+7. Run `ptt-iyp-analysis_(tranco)_infrastructure_ip_prefix_AS.ipynb` if IP, prefix, and AS dependency outputs are needed.
+8. Run `ppt-iyp-analysis (tranco).ipynb` last.
+
+If a notebook fails because an input parquet file is missing, go back to the notebook that generates that file and complete that step first.
+
+## Notes
+
+- The notebooks are currently research notebooks rather than standalone Python scripts.
+- Several outputs are large and are expected to be generated locally.
+- The Neo4j graph version matters for reproducibility because dependency paths can change when the underlying IYP/OpenINTEL/BGPKIT data changes.
+- The IP/prefix/AS mapping notebook is the longest-running step and should be planned as a long batch run.

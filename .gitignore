@@ -1,2 +1,47 @@
-data/result/
-code/.ipynb_checkpoints
+# Python / notebook cache
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+code/.ipynb_checkpoints/
+
+# Local environments
+.venv/
+venv/
+env/
+.env
+
+# Jupyter runtime artifacts
+*.nbconvert.ipynb
+
+# Keep data documentation and selected reproducibility inputs/results,
+# but ignore bulky generated result folders.
+!data/
+!data/README.md
+!data/names/
+!data/names/*.parquet
+
+data/result/*
+!data/result/
+!data/result/dns_dependency/
+!data/result/dns_dependency/*.parquet
+!data/result/NS_infrastructure/
+!data/result/NS_infrastructure/*.parquet
+!data/result/tranco_list/
+!data/result/tranco_list/*.parquet
+
+# Large or deprecated generated outputs
+data/result/tmp/
+data/result/without_allias/
+data/result/resolved_summary.parquet
+data/result/IP_Prefix_AS_dependency/
+data/result/tranco_list/IP_Prefix_AS_dependency/
+
+# Keep output documentation and current figures, skip old without-alias figures.
+!outputs/
+!outputs/reports/
+!outputs/reports/README.md
+!outputs/figures/
+!outputs/figures/README.md
+!outputs/figures/tranco_list/
+!outputs/figures/tranco_list/*
+outputs/figures/without_allias/
