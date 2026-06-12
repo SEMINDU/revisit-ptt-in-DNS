@@ -1,20 +1,13 @@
-# Software Verification & Testing
+# Tests
 
-## ✅ Overview
-This directory contains the automated test suite for this research project. Following **FAIR4RS** guidelines, these tests ensure the code is **reliable**, **reproducible**, and **robust** against changes in dependencies or data.
+This folder is reserved for validation checks for the Tranco DNS dependency workflow.
 
----
+There is currently no formal automated test suite. Useful future checks would include:
 
-## 🛠️ Testing Framework
-This project uses the [**testthat**](https://testthat.r-lib.org) R package. 
-*   **Unit Tests:** Verify individual functions in the `/R` directory.
-*   **Integration Tests:** Verify that the data pipeline from `raw` to `processed` works as expected.
+- verifying that required parquet files exist before each notebook stage
+- checking expected columns in generated dependency tables
+- validating that TCB counts are non-negative and internally consistent
+- confirming that figure-generation notebooks can read their required inputs
+- testing helper functions in `code/helpers/census_helper.py`
 
----
-
-## 🚀 How to Run Tests
-To verify the integrity of the analysis, run the following command in the R console:
-
-```r
-# Run all tests in the project
-testthat::test_local()
+Until automated tests are added, reproducibility should be checked by running the notebooks in the order described in [`../code/README.md`](../code/README.md) and confirming that the expected files in [`../data/README.md`](../data/README.md) and [`../outputs/README.md`](../outputs/README.md) are produced.

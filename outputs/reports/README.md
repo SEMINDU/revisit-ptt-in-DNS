@@ -1,33 +1,20 @@
-# Research Reports & Analysis Narratives
+# Reports
 
-## 📑 Overview
-This directory contains the final rendered outputs of the analysis pipeline. Following **FAIR4RS** and **Open Science** guidelines, these reports combine prose, code, and results to provide a complete "audit trail" of the scientific process.
+This folder is reserved for high-level analysis narratives and rendered reports derived from the notebooks in `code/`.
 
----
+At this stage, the main scientific interpretation should come from the paper or manuscript associated with the study. Use this folder for concise summaries, reproducibility notes, and future rendered report files that point readers back to the paper and the exact notebooks that generated the results.
 
-## ⚡ Reproducibility Rule
-Every document in this folder is **computationally reproducible**. 
-*   **Source:** Scripts in `/code` or `.qmd`/`.Rmd` files in the root or `/docs`.
-*   **Constraint:** These reports must **never** be manually edited after rendering. Any corrections to the text or data must be made in the source files to preserve the "Provenance" of the research findings.
+## Current Use
 
----
+- `report.md`: a short high-level report outline for the Tranco DNS dependency study.
+- Future `.html`, `.pdf`, `.qmd`, or `.md` reports can be added here when the manuscript and analysis text are finalized.
 
-## 📂 Report Inventory
+## Reproducibility
 
-| Report Name | Format | Description |
-| :--- | :--- | :--- |
-| `01_exploratory_analysis.html` | HTML | Initial data distribution and quality checks. |
-| `02_statistical_results.pdf` | PDF | Final hypothesis testing and model summaries. |
-| `03_summary_for_stakeholders.docx` | Word | Non-technical summary for policy/industry partners. |
+Reports should describe outputs generated from:
 
----
+- notebooks in `code/`
+- data in `data/`
+- figures in `outputs/figures/`
 
-## 🛠️ Rendering Instructions
-To regenerate these reports using **Quarto** (the modern standard for R/Python research), run the following from the project root:
-
-```bash
-# Render a specific report
-quarto render code/analysis.qmd --output-dir outputs/reports/
-
-# Render all project documentation
-quarto render
+Do not manually rewrite numerical results in report files without checking them against the current notebooks and generated data.
