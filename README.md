@@ -35,8 +35,21 @@ External services and data:
 - Neo4j reachable at `neo4j://localhost:7687`
 - Neo4j credentials matching the notebook defaults, unless edited locally: `neo4j` / `password`
 - APOC procedures installed in Neo4j, because dependency expansion uses `apoc.path.expandConfig`
-- The IYP/Neo4j graph dump used for the study, preferably the same February 15, 2026 snapshot
 - Optional Anycast Census/LACeS data, downloaded by `code/helpers/census_helper.py` or provided in `data/anycast_census/`
+
+### Local Internet Yellow Pages Installation
+
+This analysis requires a local installation of the [Internet Yellow Pages (IYP)](https://tutorial.iyp.ihr.live/). The IYP tutorial introduces the graph, its data model, and its Cypher-based query workflow.
+
+Follow the official [Hosting a local IYP instance](https://tutorial.iyp.ihr.live/content/local-instance.html) tutorial to install Docker and Docker Compose, download an IYP database dump, load it into Neo4j, and start the local service.
+
+The analysis in this repository used the **February 15, 2026 IYP local-instance snapshot**. This snapshot was extended with **five new materialized relationships and one additional label** required by the study.
+
+The definitions, construction procedure, and scientific motivation for these additions are described in the associated manuscript:
+
+> **Manuscript reference:** [DOI holder.]
+
+For the closest reproduction of the reported results, use the same February 15, 2026 snapshot and apply the manuscript-described graph modifications before running the notebooks.
 
 ## Running the Study
 
