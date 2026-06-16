@@ -1,18 +1,29 @@
 cff-version: 1.2.0
-message: If you use this software, please cite it using these metadata.
-title: Revisiting Perils of Transitive Trust in the Domain Name System
-abstract: To be added later
+message: "If you use this repository, please cite it using the metadata in this file."
+type: software
+title: "Revisiting Perils of Transitive Trust in the Domain Name System"
+abstract: "Notebooks, data locations, and output folders for reproducing a Tranco-based DNS dependency study that reconstructs domain-to-nameserver dependency paths from an Internet Yellow Pages/Neo4j graph and measures transitive trust in DNS infrastructure."
 authors:
-  - name: ERICK SEMINDU
+  - family-names: Semindu
+    given-names: Erick
     orcid: "0009-0004-7018-2345"
-version: 0.00.0
+version: "0.0.0"
 date-released: "2026-06-30"
-identifiers:
-  - description: This is the collection of archived snapshots of all versions of revisiting-ppt-in-DNS
-    type: doi
-    value: ""
-  - description: This is the archived snapshot of version x.xx.x of revisiting-ppt-in-DNS
-    type: doi
-    value: ""
-license: MIT License
-repository-code: ""
+license: MIT
+repository-code: "https://github.com/SEMINDU/revisit-ptt-in-DNS"
+url: "https://github.com/SEMINDU/revisit-ptt-in-DNS"
+keywords:
+  - DNS
+  - transitive trust
+  - Internet Yellow Pages
+  - Neo4j
+  - Tranco
+
+# After Zenodo creates DOIs for this repository, add them like this:
+# identifiers:
+#   - type: doi
+#     value: "10.5281/zenodo.xxxxxxx"
+#     description: "Concept DOI for all versions."
+#   - type: doi
+#     value: "10.5281/zenodo.yyyyyyy"
+#     description: "Version DOI for this release."
