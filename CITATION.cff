@@ -6,9 +6,9 @@ abstract: "Notebooks, data locations, and output folders for reproducing a Tranc
 authors:
   - family-names: Semindu
     given-names: Erick
-    orcid: "0009-0004-7018-2345"
-version: "0.0.0"
-date-released: "2026-06-30"
+    orcid: "https://orcid.org/0009-0004-7018-2345"
+version: "v1.0.0"
+date-released: "2026-06-16"
 license: MIT
 repository-code: "https://github.com/SEMINDU/revisit-ptt-in-DNS"
 url: "https://github.com/SEMINDU/revisit-ptt-in-DNS"
@@ -18,12 +18,3 @@ keywords:
   - Internet Yellow Pages
   - Neo4j
   - Tranco
-
-# After Zenodo creates DOIs for this repository, add them like this:
-# identifiers:
-#   - type: doi
-#     value: "10.5281/zenodo.xxxxxxx"
-#     description: "Concept DOI for all versions."
-#   - type: doi
-#     value: "10.5281/zenodo.yyyyyyy"
-#     description: "Version DOI for this release."
