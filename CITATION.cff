@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: If you use this software, please cite it using these metadata.
-title: revisiting-ppt-in-DNS
-abstract: This is my awesome research software. It does many things.
+title: Revisiting Perils of Transitive Trust in the Domain Name System
+abstract: To be added later
 authors:
-  - name: 
-    orcid: ""
-version: x.xx.x
-date-released: "yyyy-mm-dd"
+  - name: ERICK SEMINDU
+    orcid: "0009-0004-7018-2345"
+version: 0.00.0
+date-released: "2026-06-30"
 identifiers:
   - description: This is the collection of archived snapshots of all versions of revisiting-ppt-in-DNS
     type: doi
