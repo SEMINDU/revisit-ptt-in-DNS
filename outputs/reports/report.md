@@ -15,6 +15,7 @@ The workflow examines:
 - old-TLD comparisons inspired by earlier DNS transitive-trust work
 - nameserver infrastructure provider concentration
 - IP, BGP prefix, AS, and anycast infrastructure dependencies
+- anycast usage among the leading nameservers
 - possible relationships between Tranco rank and dependency size
 
 ## Reproducibility Trail

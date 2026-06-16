@@ -48,10 +48,10 @@ Main outputs:
 
 Summarizes nameserver infrastructure providers from the dependency outputs. It loads domain-to-nameserver data, counts frequent nameserver infrastructure, groups related nameserver labels, and prepares the provider table used by the final analysis.
 
-Main output:
+Main outputs:
 
 - default notebook write path: `data/result/dns_dependency/tranco_NS_Infrastructure.parquet`
-
+- `data/result/leading_servers/leading_servers.parquet`
 
 The final analysis notebook reads the file from `data/result/NS_infrastructure/tranco_NS_Infrastructure.parquet`. After running this notebook, make sure the generated file is available at that path, or update the final analysis path cell locally.
 
@@ -63,6 +63,7 @@ Main outputs:
 
 - `data/result/dns_dependency/IP_Prefix_AS_dependency_sample.parquet`
 - `data/result/IP_Prefix_AS_dependency/chunk_*.parquet`
+- `data/result/leading_servers/tranco_nameserver_ip_data.parquet`
 
 This is a long-running notebook. It writes chunked parquet files so the result can be stored and reused without repeating the full graph query.
 
@@ -77,6 +78,7 @@ Main outputs:
 - `data/anycast_census/laces_ipv4_anycast_high_*.parquet`
 - `data/anycast_census/laces_ipv6_anycast_high_*.parquet`
 - `data/result/anycast_results/domain_anycast_summary.parquet`
+- `data/result/anycast_results/leading_nameservers.parquet`
 
 ### 5. `ptt-iyp-analysis_(tranco).ipynb`
 
@@ -93,6 +95,7 @@ The analysis covers:
 - top-ranked versus lower-ranked domain comparisons
 - dependency on top nameserver infrastructure providers
 - IP, prefix, AS, and anycast dependency summaries
+- anycast usage among leading nameservers
 
 Main outputs:
 

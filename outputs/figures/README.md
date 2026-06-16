@@ -19,6 +19,7 @@ The figures summarize:
 - top-ranked and lower-ranked domain comparisons
 - dependency on major nameserver infrastructure providers
 - IP, prefix, AS, and anycast dependency summaries
+- leading nameserver anycast usage and infrastructure concentration checks
 
 ## Reproducibility
 
