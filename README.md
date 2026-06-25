@@ -1,6 +1,6 @@
 # Revisiting Transitive Trust in DNS
 
-This repository contains notebooks, data locations, and output folders for reproducing a Tranco-based DNS dependency study. The workflow reconstructs domain-to-nameserver dependency paths from an IYP/Neo4j graph, measures transitive closure base (TCB) size, studies nameserver infrastructure providers, maps dependencies to IP prefixes and autonomous systems, and checks anycast coverage for dependent IP infrastructure.
+This repository contains notebooks, data locations, and output folders for reproducing a Tranco-based DNS dependency study. The workflow reconstructs domain-to-nameserver dependency paths from an IYP/Neo4j graph, measures Trust Computing Base base (TCB) size, studies nameserver infrastructure providers, maps dependencies to IP prefixes and autonomous systems, and checks anycast coverage for dependent IP infrastructure.
 
 The repository is organized for reproducibility rather than as a packaged library. The main analysis is implemented as Jupyter notebooks in `code/`, and most large data products are generated locally or downloaded separately.
 
@@ -11,7 +11,7 @@ The repository is organized for reproducibility rather than as a packaged librar
 | `code/` | Jupyter notebooks and helper code used to generate the data and figures. | See [`code/README.md`](code/README.md). |
 | `data/` | Local input, intermediate, and generated parquet data. This folder may be empty in a fresh clone. | See [`data/README.md`](data/README.md). |
 | `outputs/` | Generated figures and report material for the study. | See [`outputs/README.md`](outputs/README.md). |
-| `docs/` | Supplementary documentation notes. | See [`docs/README.md`](docs/README.md). |
+| `docs/` | Required setup documentation and supporting notes. | See [`docs/README.md`](docs/README.md). |
 | `tests/` | Reserved for validation checks and future tests. | See [`tests/README.md`](tests/README.md). |
 
 ## Reproducibility Setup
@@ -37,7 +37,7 @@ External services and data:
 - APOC procedures installed in Neo4j, because dependency expansion uses `apoc.path.expandConfig`
 - Optional Anycast Census/LACeS data, downloaded by `code/helpers/census_helper.py` or provided in `data/anycast_census/`
 
-### Local Internet Yellow Pages Installation
+### Required Local IYP Setup and Materialization
 
 This analysis requires a local installation of the [Internet Yellow Pages (IYP)](https://tutorial.iyp.ihr.live/). The IYP tutorial introduces the graph, its data model, and its Cypher-based query workflow.
 
@@ -45,13 +45,19 @@ Follow the official [Hosting a local IYP instance](https://tutorial.iyp.ihr.live
 
 The analysis in this repository used the **February 15, 2026 IYP local-instance snapshot**. This snapshot was extended with **five new materialized relationships and one additional label** required by the study.
 
-The definitions, construction procedure, and scientific motivation for these additions are described in the associated manuscript:
+**Required next step:** immediately after the base IYP installation is working, apply the study-specific Neo4j memory, APOC, and graph materialization steps described in [`docs/iyp-setup-and-materialization.md`](docs/iyp-setup-and-materialization.md).
 
-> **Manuscript reference:** [DOI holder.]
+This is not optional supplementary material. The materialization step must be completed before running the notebooks, because the traversal queries expect the new relationship types and label to exist in the local IYP graph.
+
+The definitions, construction procedure, and scientific motivation for these additions are also described in the associated manuscript:
+
+> **Manuscript reference:** [[DOI.](https://doi.org/10.5281/zenodo.20717928)]
 
 For the closest reproduction of the reported results, use the same February 15, 2026 snapshot and apply the manuscript-described graph modifications before running the notebooks.
 
 ## Running the Study
+
+Before running notebooks, confirm that the required IYP setup and materialization document has been followed: [`docs/iyp-setup-and-materialization.md`](docs/iyp-setup-and-materialization.md).
 
 Run notebooks from the `code/` directory so their relative paths resolve to the repository-level `data/` and `outputs/` folders.
 
