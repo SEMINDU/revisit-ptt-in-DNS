@@ -7,7 +7,7 @@ authors:
   - family-names: Semindu
     given-names: Erick
     orcid: "https://orcid.org/0009-0004-7018-2345"
-version: "v1.0.0"
+version: "v1.0.1"
 date-released: "2026-06-16"
 identifiers:
   - type: doi
