@@ -18,7 +18,7 @@ date-released: "2026-06-16"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.20717928"
-    description: "Archived snapshot of version v1.0.0."
+    description: "Archived snapshot of version v1.0.2."
 license: MIT
 repository-code: "https://github.com/SEMINDU/revisit-ptt-in-DNS"
 url: "https://github.com/SEMINDU/revisit-ptt-in-DNS"
