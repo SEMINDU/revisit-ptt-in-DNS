@@ -13,7 +13,7 @@ authors:
   - family-names: Jonker
     given-names: Mattijs
     orcid: "https://orcid.org/0000-0001-5174-9140"
-version: "v1.0.1"
+version: "v1.0.2"
 date-released: "2026-06-16"
 identifiers:
   - type: doi
